@@ -6,10 +6,6 @@ local core = require("quicknote.core")
 local setup = function(config)
     -- setup config
     utils.config.setup(config)
-    -- init data folder for quick note
-    async.run(function()
-        utils.fs.MKDirAsync(utils.path.GetDataPath())
-    end, function() end)
     -- Define sign for quicknote
     core.DefineSign()
 end
