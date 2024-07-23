@@ -13,13 +13,13 @@ local NewNoteAtGlobalAsync = function()
     local fileName = vim.fn.input("Enter note name: ")
 
     -- get note dir path
-    local noteDirPtha = utils.path.getNoteDirPathForGlobal()
+    local noteDirPath = utils.path.getNoteDirPathForGlobal()
 
     -- create note dir (if not exist)
-    utils.fs.MKDirAsync(noteDirPtha)
+    utils.fs.MKDirAsync(noteDirPath)
 
     -- create note file
-    local noteFilePath = path:new(noteDirPtha, fileName .. "." .. utils.config.GetFileType()).filename
+    local noteFilePath = path:new(noteDirPath, fileName .. "." .. utils.config.GetFileType()).filename
     utils.fs.CreateFileAsync(noteFilePath)
 end
 M.NewNoteAtGlobal = function()
@@ -27,7 +27,9 @@ M.NewNoteAtGlobal = function()
         print("Create note globally just works in resident mode")
         return
     end
-    async.run(NewNoteAtGlobalAsync, function() end)
+    async.run(NewNoteAtGlobalAsync, function()
+        vim.defer_fn(open.OpenNoteAtGlobal, 0)
+    end)
 end
 
 -- Create a new note for the current working directory (CWD)
@@ -46,7 +48,9 @@ local NewNoteAtCWDAsync = function()
     utils.fs.CreateFileAsync(noteFilePath)
 end
 M.NewNoteAtCWD = function()
-    async.run(NewNoteAtCWDAsync, function() end)
+    async.run(NewNoteAtCWDAsync, function()
+        vim.defer_fn(open.OpenNoteAtCWD, 0)
+    end)
 end
 
 -- Create a new note at a given line for the current buffer
