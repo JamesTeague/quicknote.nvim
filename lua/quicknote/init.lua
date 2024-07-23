@@ -1,5 +1,3 @@
-local async = require("plenary.async")
-
 local utils = require("quicknote.utils")
 local core = require("quicknote.core")
 
